@@ -78,50 +78,62 @@
 = Background
 - Understanding alcohol use epidemiology is essential for public health surveillance, policy, and intervention design. 
 - However, while self-report surveys remain the primary tool for measuring consumption, their reliability depends heavily on methodological precision.
-- This study systematically evaluates the statistical power of three widely used alcohol consumption measures to determine which best detects associations in epidemiological research.
-  - Quantity-frequency
-  - Graduated-frequency
-  - Binary classification
+- Using simulated data, we systematically evaluate the statistical power of three widely used alcohol consumption measures to determine which best detects associations in epidemiological research.
+  
+#table(
+  columns: (1fr, 1fr),
+  inset: 10.5pt,
+  align: center + horizon,
+  table.header([*Measure*], [*Response*]),
+  "Quantity frequency", "Count data",
+  "Graduated frequency", "Ordinal data",
+  "Binary classification", "Binary data"
+)
 
-\
+#v(1cm)
 
 = Methods
 We conducted a simulation study to compare the statistical power of different alcohol measurement approaches:
 - *Data Simulation*
   - Generated a large-scale dataset reflecting real-world alcohol consumption distributions.
-  - Drew *7000 random samples* across varying sample sizes $n in {100, 250, 500, 1000, 5000, 10000}$
+  - Simulated *7000 random samples* across varying sample sizes $n in {100, 250, 500, 1000, 5000, 10000}$
 - *Modelling Approach*
  - Fitted four generalized linear models based on response variable type:
-  - *Negative binomial*
+  - #text(size: 35pt, weight: "bold", "Negative binomial (quantity-frequency)")
 
   $
     Y_i ~ "NB"(mu_i, theta) \
-    log(mu_i) = bold(Beta)^top X_i
+    log(mu_i) =  bold(beta)^top X_i
   $
-  
-  - *Zero-inflated negative binomial*
 
+  #v(1cm)
+  
+  - #text(size: 35pt, weight: "bold", "Zero-inflated negative binomial (quantity-frequency)")
   $
     Y_i ~ cases(
       pi + (1 - pi) dot "NB"(0 | mu_i, k) #h(1.25em) "if" y = 0, #v(2.5cm)
-      (1 - pi) dot "NB"(y | mu_i, k) #h(2.79em) "if" y gt 0) \
+      (1 - pi) dot "NB"(y | mu_i, k) #h(2.75em) "if" y gt 0) \
 
-    log(mu_i) = bold(Beta)^top X_i \
+    log(mu_i) = bold(beta)^top X_i \
 
-    log(pi_i / (1 - pi_i)) = bold(Gamma)^top z_i
+    log(pi / (1 - pi)) = bold(gamma)^top z_i
   $
+
+  #v(1cm)
   
-  - *Ordinal logistic regression*
+  - #text(size: 35pt, weight: "bold", "Ordinal logistic regression (graduated frequency)")
 
   $
-    log(P(Y_i lt.eq ell) / (P(Y_i gt ell))) = zeta_ell - bold(Beta)^top X_i
+    log(P(Y_i lt.eq ell) / (P(Y_i gt ell))) = zeta_ell - bold(beta)^top X_i
   $
+
+  #v(1cm)
   
-  - *Binary logistic regression*
+  - #text(size: 35pt, weight: "bold", "Binary logistic regression (binary classification)")
 
   $
     Y_i ~ "Bernoulli"(pi_i) \
-    log(pi_i / (1 - pi_i)) =  bold(Beta)^top X_i
+    log(pi_i / (1 - pi_i)) =  bold(beta)^top X_i
   $
   
 
@@ -144,14 +156,23 @@ We conducted a simulation study to compare the statistical power of different al
 = Conclusion
 - With small sample sizes, binary data is the most robust approach for measuring alcohol consumption. However, with larger sample sizes, count data performs equivalently.
 - Given these findings, we recommend the use of binary classifications when working with small sample sizes due to their robust performance. 
-- For large sample sizes, however, count data can offer greater precision by capturing more detailed variations in consumption levels.
+- For large sample sizes, count data can offer greater precision by capturing more detailed variations in consumption levels.
+- These findings have important implications for public health research and policy, where accurate measurement is critical. Future studies should explore how these methods perform in broader populations, including high-risk groups and cross-cultural settings, to ensure generalizability.
+
+#v(0.5cm) #h(6em) *Acknowledgements*
+
+#set text(size: 30pt)
+#set align(center)
+
+#v(-0.5cm)
+#h(-10em)
+This work has emanated from research conducted \  #h(-10em)
+with the financial support of Taighde Éireann – \ #h(-10em)
+Research Ireland under Grant number 18/CRT/6049
 
 #place(
   bottom + right,
-  grid(
-    columns: 2,
-    grid.cell(colspan: 1, image("figures/Maynooth logo.JPG", width: 65%), align: left),
-    grid.cell(colspan: 1, image("figures/QR Code.svg"), align: right)
-  ))
-
+  dx: -20pt,
+  image("figures/QR Code.svg", width: 25%)
+)
 
